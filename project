@@ -1,0 +1,192 @@
+import numpy as np #linear algebra
+import matplotlib.pyplot as plt
+import pandas as pd #data processing, CSV file I/O (e.g. pd.read_csv)
+import scipy.constants
+import math
+eps0 = scipy.constants.epsilon_0
+pi = scipy.constants.pi
+e = scipy.constants.elementary_charge
+G = scipy.constants.gravitational_constant
+m_e = scipy.constants.m_e
+m_p = scipy.constants.m_p
+k=1/(4*pi*eps0)
+maskx = []
+pchange = []
+
+Wbox = 9
+Hbox = 3
+W = 1
+d = 1
+h = d/2
+s=1
+g=1
+xx = [int(round(ii*1000))/1000 for ii in list(np.linspace(-Wbox/2, Wbox/2, int(Wbox/h)+1))]
+yy = [int(round(ii*1000))/1000 for ii in list(np.linspace(-Hbox/2, Hbox/2, int(Hbox/h)+1))]
+xx1, yy1 = np.meshgrid(xx,yy)
+
+vv = np.zeros(xx1.shape)
+#If we know the approximated values of V, we could assign it as initial values. 
+# for ii in range(78):
+#     vv[ii,:] = 5*ii/77
+#     vv[160-ii,:]= -5*ii/77
+
+ci = int(input("Insert value of Ci : "))
+cj = int(input("Insert value of Cj : "))
+if (ci == 1):
+    vv[np.where((yy1== d/2) & (xx1>=-(Wbox/2)+s) & (xx1<=-(Wbox/2)+s+h))] = 1
+    mask = np.where(((yy1== d/2) & (xx1>=-(Wbox/2)+s) & (xx1<=-(Wbox/2)+s+h)) | \
+                    ((yy1==  Hbox/2) & (xx1>= -Wbox/2) & (xx1<= Wbox/2)) | \
+                    ((yy1== -Hbox/2) & (xx1>= -Wbox/2) & (xx1<= Wbox/2)) | \
+                    ((xx1==  Wbox/2) & (yy1>= -Hbox/2) & (yy1<= Hbox/2)) | \
+                    ((xx1== -Wbox/2) & (yy1>= -Hbox/2) & (yy1<= Hbox/2)) )
+elif (ci == 2):
+    vv[np.where((yy1== d/2) & (xx1>=-(Wbox/2)+s+g) & (xx1<=-(Wbox/2)+s+g+h))] = 1
+    mask = np.where(((yy1== d/2) & (xx1>=-(Wbox/2)+s+g) & (xx1<=(Wbox/2)+s+g+h)) | \
+                    ((yy1==  Hbox/2) & (xx1>= -Wbox/2) & (xx1<= Wbox/2)) | \
+                    ((yy1== -Hbox/2) & (xx1>= -Wbox/2) & (xx1<= Wbox/2)) | \
+                    ((xx1==  Wbox/2) & (yy1>= -Hbox/2) & (yy1<= Hbox/2)) | \
+                    ((xx1== -Wbox/2) & (yy1>= -Hbox/2) & (yy1<= Hbox/2)) )
+elif (ci == 3):
+    vv[np.where((yy1== d/2) & (xx1>=(Wbox/2)-s-g-h) & (xx1<=(Wbox/2)-s-g))] = 1
+    mask = np.where(((yy1== d/2) & (xx1>=(Wbox/2)-s-g-h) & (xx1<=(Wbox/2)-s-g)) | \
+                    ((yy1==  Hbox/2) & (xx1>= -Wbox/2) & (xx1<= Wbox/2)) | \
+                    ((yy1== -Hbox/2) & (xx1>= -Wbox/2) & (xx1<= Wbox/2)) | \
+                    ((xx1==  Wbox/2) & (yy1>= -Hbox/2) & (yy1<= Hbox/2)) | \
+                    ((xx1== -Wbox/2) & (yy1>= -Hbox/2) & (yy1<= Hbox/2)) )
+elif (ci == 4):
+    vv[np.where((yy1== -d/2) & (xx1>=-(Wbox/2)+s) & (xx1<=-(Wbox/2)+s+h))] = 1
+    mask = np.where(((yy1== d/2) & (xx1>=-(Wbox/2)+s) & (xx1<=-(Wbox/2)+s+h)) | \
+                    ((yy1==  Hbox/2) & (xx1>= -Wbox/2) & (xx1<= Wbox/2)) | \
+                    ((yy1== -Hbox/2) & (xx1>= -Wbox/2) & (xx1<= Wbox/2)) | \
+                    ((xx1==  Wbox/2) & (yy1>= -Hbox/2) & (yy1<= Hbox/2)) | \
+                    ((xx1== -Wbox/2) & (yy1>= -Hbox/2) & (yy1<= Hbox/2)) )
+elif (ci == 5):
+    vv[np.where((yy1== -d/2) & (xx1>=-(Wbox/2)+s+g) & (xx1<=-(Wbox/2)+s+g+h))] = 1
+    mask = np.where(((yy1== -d/2) & (xx1>=-(Wbox/2)+s+g) & (xx1<=(Wbox/2)+s+g+h)) | \
+                    ((yy1==  Hbox/2) & (xx1>= -Wbox/2) & (xx1<= Wbox/2)) | \
+                    ((yy1== -Hbox/2) & (xx1>= -Wbox/2) & (xx1<= Wbox/2)) | \
+                    ((xx1==  Wbox/2) & (yy1>= -Hbox/2) & (yy1<= Hbox/2)) | \
+                    ((xx1== -Wbox/2) & (yy1>= -Hbox/2) & (yy1<= Hbox/2)) )
+elif (ci == 6):
+    vv[np.where((yy1== -d/2) & (xx1>=(Wbox/2)-s-g-h) & (xx1<=(Wbox/2)-s-g))] = 1
+    mask = np.where(((yy1== -d/2) & (xx1>=(Wbox/2)-s-g-h) & (xx1<=(Wbox/2)-s-g)) | \
+                    ((yy1==  Hbox/2) & (xx1>= -Wbox/2) & (xx1<= Wbox/2)) | \
+                    ((yy1== -Hbox/2) & (xx1>= -Wbox/2) & (xx1<= Wbox/2)) | \
+                    ((xx1==  Wbox/2) & (yy1>= -Hbox/2) & (yy1<= Hbox/2)) | \
+                    ((xx1== -Wbox/2) & (yy1>= -Hbox/2) & (yy1<= Hbox/2)) )
+
+for ii in range(len(mask[0])):
+    maskx.append((mask[0][ii],mask[1][ii]))
+
+#คำนวนค่าศักย์ไฟฟ้าโดยวิธี Iteration
+C = []
+m, n = xx1.shape
+niter = 300
+
+for kk in range(niter):
+    for ii in range(m):
+        for jj in range(n):
+            if (ii,jj) not in maskx:
+                vv[ii,jj] = 0.25* (vv[ii-1,jj]+vv[ii+1,jj]+vv[ii,jj-1]+vv[ii,jj+1])
+#คำนวนค่าความเก็บประจุทุกๆ iteration เพื่อดูหยุดว่าได้หรือยัง
+    if (cj == 1):
+        rhos = (0-vv[np.where((yy1==int(round((d/2+h)*1000))/1000) & (xx1>=-(Wbox/2)+s) & (xx1<=-(Wbox/2)+s+h))])
+        rhos = rhos + (0-vv[np.where((yy1==int(round((d/2-h)*1000))/1000) & (xx1>=-(Wbox/2)+s) & (xx1<=-(Wbox/2)+s+h))])
+    elif (cj == 2):
+        rhos = (0-vv[np.where((yy1==int(round((d/2+h)*1000))/1000) & (xx1>=-(Wbox/2)+s+g) & (xx1<=-(Wbox/2)+s+g+h))])
+        rhos = rhos + (0-vv[np.where((yy1==int(round((d/2-h)*1000))/1000) & (xx1>=-(Wbox/2)+s+g) & (xx1<=-(Wbox/2)+s+g+h))])
+    elif (cj == 3):
+        rhos = (0-vv[np.where((yy1==int(round((d/2+h)*1000))/1000) & (xx1>=(Wbox/2)-s-g-h) & (xx1<=(Wbox/2)-s-g))])
+        rhos = rhos + (0-vv[np.where((yy1==int(round((d/2-h)*1000))/1000) & (xx1>=(Wbox/2)-s-g-h) & (xx1<=(Wbox/2)-s-g))])
+    elif (cj == 4):
+        rhos = (0-vv[np.where((yy1==int(round((-d/2+h)*1000))/1000) & (xx1>=-(Wbox/2)+s) & (xx1<=-(Wbox/2)+s+h))])
+        rhos = rhos + (0-vv[np.where((yy1==int(round((-d/2-h)*1000))/1000) & (xx1>=-(Wbox/2)+s) & (xx1<=-(Wbox/2)+s+h))])
+    elif (cj == 5):
+        rhos = (0-vv[np.where((yy1==int(round((-d/2+h)*1000))/1000) & (xx1>=-(Wbox/2)+s+g) & (xx1<=-(Wbox/2)+s+g+h))])
+        rhos = rhos + (0-vv[np.where((yy1==int(round((-d/2-h)*1000))/1000) & (xx1>=-(Wbox/2)+s+g) & (xx1<=-(Wbox/2)+s+g+h))])
+    elif (cj == 6):
+        rhos = (0-vv[np.where((yy1==int(round((-d/2+h)*1000))/1000) & (xx1>=(Wbox/2)-s-g-h) & (xx1<=(Wbox/2)-s-g))])
+        rhos = rhos + (0-vv[np.where((yy1==int(round((-d/2-h)*1000))/1000) & (xx1>=(Wbox/2)-s-g-h) & (xx1<=(Wbox/2)-s-g))])
+    #rhos ที่ได้เป็น delta V เท่านั้นต้องหารด้วย delta ระยะทาง ถึงจะได้สนามไฟฟ้า
+    rhos = eps0*rhos/h
+    #ความหนาแน่นประจุค่าแรกกับค่าสุดท้าย อยู่ที่ขอบแผ่น เป็นค่าของแค่ครึ่งชิ้นเท่านั้น
+    C.append(h*(rhos[1:-1].sum()+0.5*(rhos[0]+rhos[-1]))/10)#edited rhos[1]=>rhos[0] on 28-Feb-2022
+    if kk > 0:
+        pchange.append((C[-2]-C[-1])*100/C[-2])
+np.save('output.npy', vv)
+
+print('C should be about',1e12*eps0*W/d, 'pF/m')
+
+print('Computed C is ',C[-1]*1e12,'pF/m')
+
+plt.plot(np.array(C)*1e12)
+plt.grid()
+plt.xlabel('# iteration')
+plt.ylabel('Capacitance [pF/m]')
+plt.title('Convergence of the iterative method')
+plt.show()
+
+plt.plot(np.array(pchange))
+plt.grid()
+plt.xlabel('# iteration')
+plt.ylabel('Change of Capacitance [%]')
+plt.title('Convergence of the iterative method')
+plt.show()
+
+print('The last capacitance is ',C[-1],'. The last percent change is ',pchange[-1],'.')
+
+pchange[-1]
+
+plt.imshow(25*(vv+5))
+plt.show()
+
+#คำนวนค่าความหนาแน่นประจุเชิงผิว
+n = len(rhos)-1
+tmp = []
+for ii in range(n):
+    tmp.append(0.5*(rhos[ii]+rhos[ii+1]))
+rhos = np.array(tmp)
+
+import matplotlib.pyplot as plt
+plt.plot([-W/2+h*(ii+0.5) for ii in range(len(rhos))],rhos)
+plt.xlabel('[m]')
+plt.ylabel('[C/$m^2$]')
+plt.grid()
+plt.show()
+
+rhos1 = (5-vv[np.where((yy1==int(round((-d/2+h)*1000))/1000) & (xx1>=-1) & (xx1<=1))])
+rhos2 = (5-vv[np.where((yy1==int(round((-d/2-h)*1000))/1000) & (xx1>=-1) & (xx1<=1))])
+rhos1 = eps0*rhos1/h
+rhos2 = eps0*rhos2/h
+
+#Find average at middle points
+n = len(rhos1)-1
+tmp = []
+for ii in range(n):
+    tmp.append(0.5*(rhos1[ii]+rhos1[ii+1]))
+rhos1 = np.array(tmp)
+#Find average at middle points
+n = len(rhos2)-1
+tmp = []
+for ii in range(n):
+    tmp.append(0.5*(rhos2[ii]+rhos2[ii+1]))
+rhos2 = np.array(tmp)
+
+plt.plot(vv[:,9])
+plt.grid()
+plt.show()
+
+plt.plot([-W/2+h*(ii+0.5) for ii in range(len(rhos1))],rhos1)
+plt.xlabel('[m]')
+plt.ylabel('[$C/m^2$]')
+plt.title('rhos1')
+plt.grid()
+plt.show()
+
+plt.plot([-W/2+h*(ii+0.5) for ii in range(len(rhos2))],rhos2)
+plt.xlabel('[m]')
+plt.ylabel('[$C/m^2$]')
+plt.title('rhos2')
+plt.grid()
+plt.show()
+
